@@ -1,0 +1,108 @@
+agent:
+  # - PPO
+  # - PPOAIRLImit
+  # - PPOGAILImit
+  - PPOGAIL-SASImit
+  # - PPOGAIL-SImit
+  - PPODARC
+  # - PPOWassSAS-Imit
+  # - PPOWass-Imit
+  # - PPOWassS-Imit
+  - PPOANE
+device: cpu
+seed: 42
+foot_fric_coef: 1
+
+# Ray
+repeat_run: 5
+metric: mean_avg_return
+mode: max
+
+# Off-Dynamics
+type_training: use_both
+initialize_target_policy: True
+target_sample_interval: 1000
+path_optimal_source_policy: 'envs/HalfCheetah-v2/models/PPO/actor_critic'
+path_optimal_ob_rms: 'envs/HalfCheetah-v2/models/PPO/ob_rms'
+experts_dir: 'expert_trajectories'
+source_max_traj_length: 1000
+target_max_traj_length: 1000
+source_num_steps: 1000
+target_num_steps: 1000
+n_target_trajs: 1
+n_source_trajs: 8
+target_num_processes: 1
+source_num_processes: 8     
+n_epochs: 5000
+ppo_epoch: 5
+num_mini_batch: 20
+mini_batch_size: null    # 256
+target_mini_batch_size: null    # 256
+source_mini_batch_size: null     # 256
+
+# DARC parameters
+classifier_hidden: 100
+dis_dropout: False
+darc_batch_size: 1000
+darc_mini_batch_size: 128
+noise_std_discriminator:
+  - 1.0
+  - 0.1
+  - 0.0
+  - 0.5
+darc_lr: 1.0e-3
+darc_grad_steps: 5
+
+# ANE
+ane_noise_std:
+  - 0.1
+  - 0.2
+  - 0.3
+  - 0.5
+
+# Imitation regularization
+imit_coef:
+  - 0.5
+  - 1
+  - 2
+  - 5
+type_wass_reward:
+  - classic
+  # - pwil
+
+# GAIL
+subsample_frequency: 2
+gail_epoch: 2
+gail_hidden: 100   
+num_expert_trajs: 5
+  # - 10
+  # - 25
+airl_grad_steps: 5
+airl_batch_size: 128
+gail_grad_steps: 5
+gail_batch_size: 128
+expert_batch_size: 500
+
+# PPO
+hidden_size: 256
+lr: 3.0e-4
+clip_param: 0.1
+eps: 1.0e-5
+alpha: 0.99
+gamma: 0.99
+use_gae: True
+gae_lambda: 0.95
+entropy_coef: 0.0005
+value_loss_coef: 0.5
+max_grad_norm: 0.8
+cuda_deterministic: False
+use_proper_time_limits: True
+recurrent_policy: False
+use_linear_lr_decay: False
+tanh_squash: False
+policy_logstd_init: 0
+
+# Logs
+log_interval: 10
+save_interval: 10000000
+eval_interval: null
